@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useRecipeStore } from "./recipeStore";
 
 const FavoritesList = () => {
-  const favorites = useRecipeStore((state) =>
-    state.favorites
-      .map((id) => state.recipes.find((recipe) => recipe.id === id))
-      .filter(Boolean)
-  );
+  const favoritesIds = useRecipeStore((state) => state.favorites);
+  const recipes = useRecipeStore((state) => state.recipes);
   const removeFavorite = useRecipeStore((state) => state.removeFavorite);
+
+  // Use useMemo to avoid creating a new array every render
+  const favorites = useMemo(() => {
+    return favoritesIds
+      .map((id) => recipes.find((recipe) => recipe.id === id))
+      .filter(Boolean);
+  }, [favoritesIds, recipes]);
 
   return (
     <div>

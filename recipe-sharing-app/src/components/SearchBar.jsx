@@ -6,9 +6,10 @@ const SearchBar = () => {
   const setSearchTerm = useRecipeStore((state) => state.setSearchTerm);
   const filterRecipes = useRecipeStore((state) => state.filterRecipes);
 
+  // Only run filter when searchTerm changes
   useEffect(() => {
     filterRecipes();
-  }, [searchTerm, filterRecipes]);
+  }, [searchTerm]); // stable dependency
 
   return (
     <input

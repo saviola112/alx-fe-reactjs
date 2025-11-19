@@ -7,9 +7,10 @@ const RecommendationsList = () => {
     (state) => state.generateRecommendations
   );
 
+  // Run only once on mount
   useEffect(() => {
     generateRecommendations();
-  }, [generateRecommendations]);
+  }, []); // run only once
 
   return (
     <div>
