@@ -1,71 +1,100 @@
 import React, { useState } from "react";
-import { fetchUserData } from "../services/githubService";
+import { fetchUserData } from "../api/githubApi";
 
-const Search = () => {
+function Search() {
   const [username, setUsername] = useState("");
-  const [userData, setUserData] = useState(null);
+  const [location, setLocation] = useState("");
+  const [minRepos, setMinRepos] = useState("");
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchUserData(username);
-      setUserData(data);
-    } catch {
-      setError("Looks like we can't find the user");
-      setUserData(null);
+  const handleSearch = async () => {
+    if (!username.trim()) {
+      setError("Username is required");
+      return;
     }
+
+    setLoading(true);
+    setError("");
+    setResults([]);
+
+    try {
+      const users = await fetchUserData(username, location, minRepos);
+      setResults(users);
+    } catch (err) {
+      setError("Failed to fetch data");
+    }
+
     setLoading(false);
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto mt-10 bg-gray-800 rounded shadow-md">
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col sm:flex-row gap-2 items-center"
-      >
+    <div className="w-full max-w-xl space-y-4">
+      <div className="space-y-2">
         <input
           type="text"
+          placeholder="Search GitHub username..."
+          className="w-full p-2 rounded bg-gray-800 border border-gray-600"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter GitHub username"
-          className="border border-gray-600 rounded p-2 flex-1 bg-gray-900 text-white placeholder-gray-400"
         />
+
+        <input
+          type="text"
+          placeholder="Filter by location (optional)"
+          className="w-full p-2 rounded bg-gray-800 border border-gray-600"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+        />
+
+        <input
+          type="number"
+          placeholder="Minimum repos (optional)"
+          className="w-full p-2 rounded bg-gray-800 border border-gray-600"
+          value={minRepos}
+          onChange={(e) => setMinRepos(e.target.value)}
+        />
+
         <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+          onClick={handleSearch}
+          className="w-full bg-blue-500 p-2 rounded font-semibold hover:bg-blue-600"
         >
           Search
         </button>
-      </form>
+      </div>
 
-      {loading && <p className="mt-4 text-gray-400">Loading...</p>}
-      {error && <p className="mt-4 text-red-500">{error}</p>}
-      
-      {userData && (
-        <div className="mt-6 p-4 bg-gray-700 rounded flex flex-col items-center gap-2">
-          <img
-            src={userData.avatar_url}
-            alt={userData.login}
-            className="w-24 h-24 rounded-full"
-          />
-          <p className="text-white text-lg font-semibold">
-            {userData.name || userData.login}
-          </p>
-          <a
-            href={userData.html_url}
-            target="_blank"
-            className="text-blue-400 hover:underline"
+      {loading && <p className="text-center">Loading...</p>}
+      {error && <p className="text-red-400">{error}</p>}
+
+      {/* --- RESULTS --- */}
+      <div className="grid gap-4">
+        {results.map((user) => (
+          <div
+            key={user.id}
+            className="flex items-center gap-4 bg-gray-800 p-4 rounded-lg border border-gray-700"
           >
-            View GitHub Profile
-          </a>
-        </div>
-      )}
+            <img
+              src={user.avatar_url}
+              alt="avatar"
+              className="w-16 h-16 rounded-full"
+            />
+
+            <div>
+              <h2 className="text-xl font-semibold">{user.login}</h2>
+              <a
+                href={user.html_url}
+                target="_blank"
+                className="text-blue-400 underline"
+              >
+                View Profile
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
+}
 
 export default Search;
