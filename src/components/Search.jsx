@@ -10,7 +10,9 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // -------------------
   // Basic Search Handler
+  // -------------------
   const handleBasicSearch = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -21,14 +23,16 @@ const Search = () => {
     try {
       const data = await fetchUserData(username);
       setUser(data);
-    } catch {
+    } catch (err) {
       setError("Looks like we cant find the user");
     } finally {
       setLoading(false);
     }
   };
 
+  // -------------------
   // Advanced Search Handler
+  // -------------------
   const handleAdvancedSearch = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -38,8 +42,12 @@ const Search = () => {
 
     try {
       const results = await fetchAdvancedUsers(location, minRepos);
-      setAdvancedUsers(results);
-    } catch {
+      if (results.length === 0) {
+        setError("Looks like we cant find the user");
+      } else {
+        setAdvancedUsers(results);
+      }
+    } catch (err) {
       setError("Looks like we cant find the user");
     } finally {
       setLoading(false);
@@ -79,7 +87,6 @@ const Search = () => {
         className="p-4 bg-gray-100 rounded-lg shadow"
       >
         <h2 className="text-xl font-semibold mb-3">Advanced Search</h2>
-
         <input
           type="text"
           placeholder="Location (e.g Lagos)"
@@ -87,7 +94,6 @@ const Search = () => {
           onChange={(e) => setLocation(e.target.value)}
           className="w-full p-2 border rounded mb-3"
         />
-
         <input
           type="number"
           placeholder="Minimum repositories"
@@ -95,7 +101,6 @@ const Search = () => {
           onChange={(e) => setMinRepos(e.target.value)}
           className="w-full p-2 border rounded mb-3"
         />
-
         <button
           type="submit"
           className="w-full bg-green-600 text-white py-2 rounded"
@@ -118,7 +123,7 @@ const Search = () => {
             alt="avatar"
             className="w-24 mx-auto rounded-full"
           />
-          <h3 className="text-xl font-bold mt-3">{user.name || "No Name"}</h3>
+          <h3 className="text-xl font-bold mt-3">{user.name || user.login}</h3>
           <a
             href={user.html_url}
             target="_blank"
@@ -130,11 +135,10 @@ const Search = () => {
         </div>
       )}
 
-      {/* ADVANCED RESULTS */}
+      {/* ADVANCED SEARCH RESULTS */}
       {advancedUsers.length > 0 && (
         <div className="mt-6">
           <h2 className="text-xl font-semibold mb-3">Search Results</h2>
-
           {advancedUsers.map((u) => (
             <div
               key={u.id}
