@@ -11,7 +11,7 @@ function UserProfile() {
       {/* Image: ADDED: transition, duration, ease-in-out, hover:scale-110 */}
       {/* Requirement 1: Hover Effects on Image */}
       <img
-        src="https://via.placeholder.com/150"
+        src="https://picsum.photos/id/1025/150/150"
         alt="User"
         className="rounded-full w-24 h-24 sm:w-24 sm:h-24 md:w-36 md:h-36 mx-auto 
                    transition duration-300 ease-in-out hover:scale-110"
