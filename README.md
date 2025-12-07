@@ -1,16 +1,81 @@
-# React + Vite
+# Recipe Sharing Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application built with React and Tailwind CSS for sharing and discovering recipes.
 
-Currently, two official plugins are available:
+## Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The Recipe Sharing Platform allows users to:
+- Browse a collection of recipes
+- View detailed recipe information
+- Add and share their own recipes
+- Search and filter recipes
 
-## React Compiler
+## Technologies Used
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React** - Frontend framework
+- **Vite** - Build tool and development server
+- **Tailwind CSS v3** - Utility-first CSS framework
+- **PostCSS** - CSS processing
+- **Autoprefixer** - CSS vendor prefixing
 
-## Expanding the ESLint configuration
+## Setup Instructions
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/saviola112/alx-fe-reactjs.git
+cd alx-fe-reactjs/recipe-sharing-platform
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+4. Open your browser and navigate to `http://localhost:5173`
+
+## Project Structure
+```
+recipe-sharing-platform/
+├── src/
+│   ├── components/      # React components
+│   ├── App.jsx         # Main App component
+│   ├── index.css       # Tailwind CSS imports
+│   └── main.jsx        # Entry point
+├── public/             # Static assets
+├── tailwind.config.js  # Tailwind configuration
+├── postcss.config.js   # PostCSS configuration
+└── package.json        # Project dependencies
+```
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+
+## Features (Coming Soon)
+
+- Recipe listing page
+- Recipe detail view
+- Add new recipe form
+- Search and filter functionality
+- Responsive design
+
+## Author
+
+Your Name
+
+## License
+
+This project is part of the ALX Frontend Engineering program.
