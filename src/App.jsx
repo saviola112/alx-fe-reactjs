@@ -5,7 +5,9 @@ function App() {
         <h1 className="text-4xl font-bold text-blue-500 mb-4">
           Recipe Sharing Platform
         </h1>
-        <p className="text-gray-600">Tailwind CSS is working correctly! ✅</p>
+        <p className="text-gray-600">
+          Tailwind CSS is working correctly! ✅
+        </p>
       </div>
     </div>
   );
