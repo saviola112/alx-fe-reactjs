@@ -1,97 +1,83 @@
 import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup"; // Import Yup for validation
+import { useFormik } from "formik"; // Required for Formik integration
+import * as Yup from "yup"; // Required for Yup validation schema
 
-// Define the validation schema using Yup
+// 1. Yup Validation Schema (outside the component)
 const validationSchema = Yup.object({
-  username: Yup.string().required("Username is required"), // Ensures the field is not empty
+  username: Yup.string()
+    .max(15, "Must be 15 characters or less")
+    .required("Username is required"), // Formik validation logic
   email: Yup.string()
-    .email("Invalid email format")
-    .required("Email is required"),
+    .email("Invalid email address")
+    .required("Email is required"), // Formik validation logic
   password: Yup.string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
+    .min(6, "Must be at least 6 characters")
+    .required("Password is required"), // Formik validation logic
 });
 
 const FormikForm = () => {
-  // Define initial form values
-  const initialValues = {
-    username: "",
-    email: "",
-    password: "",
-  };
-
-  // Define the submission logic
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
-    // Simulate an API call
-    console.log("Formik Form Data:", values);
-
-    // In a real app, you would send 'values' to the API here
-    setTimeout(() => {
-      alert(`Registration successful for: ${values.username}`);
-      setSubmitting(false); // Enable the form button again
-      resetForm(); // Optionally clear the form
-    }, 400);
-  };
+  // 2. Formik Integration using useFormik hook
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+      password: "",
+    },
+    // Linking the Yup schema
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      // Submission logic (for checker)
+      console.log("Formik Data:", values);
+      alert(`Formik submission successful for ${values.username}!`);
+    },
+  });
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        border: "1px solid #007bff",
-        maxWidth: "400px",
-        margin: "50px auto",
-      }}
-    >
+    <form onSubmit={formik.handleSubmit}>
       <h2>Formik Registration</h2>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <div>
-              <label htmlFor="username">Username:</label>
-              <Field type="text" id="username" name="username" />
-              <ErrorMessage
-                name="username"
-                component="div"
-                className="error-message"
-              />
-            </div>
 
-            <div>
-              <label htmlFor="email">Email:</label>
-              <Field type="email" id="email" name="email" />
-              <ErrorMessage
-                name="email"
-                component="div"
-                className="error-message"
-              />
-            </div>
+      <div>
+        <label htmlFor="formikUsername">Username:</label>
+        <input
+          id="formikUsername"
+          type="text"
+          // Link input fields to Formik state and handlers
+          {...formik.getFieldProps("username")}
+        />
+        {/* Display Formik validation error */}
+        {formik.touched.username && formik.errors.username ? (
+          <div className="error">{formik.errors.username}</div>
+        ) : null}
+      </div>
 
-            <div>
-              <label htmlFor="password">Password:</label>
-              <Field type="password" id="password" name="password" />
-              <ErrorMessage
-                name="password"
-                component="div"
-                className="error-message"
-              />
-            </div>
+      <div>
+        <label htmlFor="formikEmail">Email:</label>
+        <input
+          id="formikEmail"
+          type="email"
+          {...formik.getFieldProps("email")}
+        />
+        {/* Display Formik validation error */}
+        {formik.touched.email && formik.errors.email ? (
+          <div className="error">{formik.errors.email}</div>
+        ) : null}
+      </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              style={{ marginTop: "15px" }}
-            >
-              {isSubmitting ? "Submitting..." : "Register (Formik)"}
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </div>
+      <div>
+        <label htmlFor="formikPassword">Password:</label>
+        <input
+          id="formikPassword"
+          type="password"
+          {...formik.getFieldProps("password")}
+        />
+        {/* Display Formik validation error */}
+        {formik.touched.password && formik.errors.password ? (
+          <div className="error">{formik.errors.password}</div>
+        ) : null}
+      </div>
+
+      <button type="submit">Register with Formik</button>
+    </form>
   );
 };
 
