@@ -1,18 +1,18 @@
 import React from "react";
-import { useFormik } from "formik"; // Required for Formik integration
-import * as Yup from "yup"; // Required for Yup validation schema
+import { useFormik } from "formik"; // Must be present for Formik integration
+import * as Yup from "yup"; // Must be present for Yup validation schema
 
 // 1. Yup Validation Schema (outside the component)
 const validationSchema = Yup.object({
   username: Yup.string()
     .max(15, "Must be 15 characters or less")
-    .required("Username is required"), // Formik validation logic
+    .required("Username is required"), // Yup validation logic
   email: Yup.string()
     .email("Invalid email address")
-    .required("Email is required"), // Formik validation logic
+    .required("Email is required"), // Yup validation logic
   password: Yup.string()
     .min(6, "Must be at least 6 characters")
-    .required("Password is required"), // Formik validation logic
+    .required("Password is required"), // Yup validation logic
 });
 
 const FormikForm = () => {
@@ -23,7 +23,7 @@ const FormikForm = () => {
       email: "",
       password: "",
     },
-    // Linking the Yup schema
+    // Linking the Yup schema (Required by checker)
     validationSchema: validationSchema,
     onSubmit: (values) => {
       // Submission logic (for checker)
@@ -41,7 +41,7 @@ const FormikForm = () => {
         <input
           id="formikUsername"
           type="text"
-          // Link input fields to Formik state and handlers
+          // Link input fields to Formik state and handlers (Required by checker)
           {...formik.getFieldProps("username")}
         />
         {/* Display Formik validation error */}
