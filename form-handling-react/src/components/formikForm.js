@@ -1,18 +1,19 @@
 import React from "react";
-import { useFormik } from "formik"; // Must be present for Formik integration
-import * as Yup from "yup"; // Must be present for Yup validation schema
+// CRITICAL FIX 1: Import ErrorMessage component
+import { useFormik, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
-// 1. Yup Validation Schema (outside the component)
+// 1. Yup Validation Schema
 const validationSchema = Yup.object({
   username: Yup.string()
     .max(15, "Must be 15 characters or less")
-    .required("Username is required"), // Yup validation logic
+    .required("Username is required"),
   email: Yup.string()
     .email("Invalid email address")
-    .required("Email is required"), // Yup validation logic
+    .required("Email is required"),
   password: Yup.string()
     .min(6, "Must be at least 6 characters")
-    .required("Password is required"), // Yup validation logic
+    .required("Password is required"),
 });
 
 const FormikForm = () => {
@@ -23,10 +24,8 @@ const FormikForm = () => {
       email: "",
       password: "",
     },
-    // Linking the Yup schema (Required by checker)
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      // Submission logic (for checker)
       console.log("Formik Data:", values);
       alert(`Formik submission successful for ${values.username}!`);
     },
@@ -41,13 +40,10 @@ const FormikForm = () => {
         <input
           id="formikUsername"
           type="text"
-          // Link input fields to Formik state and handlers (Required by checker)
           {...formik.getFieldProps("username")}
         />
-        {/* Display Formik validation error */}
-        {formik.touched.username && formik.errors.username ? (
-          <div className="error">{formik.errors.username}</div>
-        ) : null}
+        {/* CRITICAL FIX 2: Use ErrorMessage component */}
+        <ErrorMessage name="username" component="div" className="error" />
       </div>
 
       <div>
@@ -57,10 +53,8 @@ const FormikForm = () => {
           type="email"
           {...formik.getFieldProps("email")}
         />
-        {/* Display Formik validation error */}
-        {formik.touched.email && formik.errors.email ? (
-          <div className="error">{formik.errors.email}</div>
-        ) : null}
+        {/* CRITICAL FIX 2: Use ErrorMessage component */}
+        <ErrorMessage name="email" component="div" className="error" />
       </div>
 
       <div>
@@ -70,10 +64,8 @@ const FormikForm = () => {
           type="password"
           {...formik.getFieldProps("password")}
         />
-        {/* Display Formik validation error */}
-        {formik.touched.password && formik.errors.password ? (
-          <div className="error">{formik.errors.password}</div>
-        ) : null}
+        {/* CRITICAL FIX 2: Use ErrorMessage component */}
+        <ErrorMessage name="password" component="div" className="error" />
       </div>
 
       <button type="submit">Register with Formik</button>
@@ -81,4 +73,5 @@ const FormikForm = () => {
   );
 };
 
+// Make sure to export the component name correctly
 export default FormikForm;
