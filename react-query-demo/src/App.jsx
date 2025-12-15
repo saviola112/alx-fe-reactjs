@@ -1,10 +1,10 @@
-import PostsComponent from "./PostsComponent.jsx";
+import PostsComponent from "./PostsComponent.jsx"; // Ensure you fixed the file name typo here
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <PostsComponent />
+      <PostsComponent /> // Make sure you render the component
     </div>
   );
 }
