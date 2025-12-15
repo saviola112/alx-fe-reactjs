@@ -1,5 +1,5 @@
 // Fix if the checker insists on App.jsx:
-import PostsComponent from "./PostsComponent.jsx";
+import PostsComponent from "./components/PostsComponent.jsx";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
