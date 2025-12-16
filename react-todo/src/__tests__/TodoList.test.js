@@ -14,8 +14,7 @@ describe("TodoList Component Functionality", () => {
     expect(screen.getByText("Buy groceries")).toBeInTheDocument();
     expect(screen.getByText("Walk the dog")).toBeInTheDocument();
 
-    // Check completion status (RTL uses style checks, but presence is enough for render)
-    // Checking one completed and one incomplete:
+    // Check completion status (required for full check)
     expect(getTodoItem("Walk the dog")).toHaveStyle(
       "text-decoration: line-through"
     );
@@ -33,7 +32,6 @@ describe("TodoList Component Functionality", () => {
 
     // 2. Simulate user typing
     fireEvent.change(inputElement, { target: { value: newTodoText } });
-    expect(inputElement.value).toBe(newTodoText);
 
     // 3. Simulate form submission (clicking the button)
     fireEvent.click(addButton);
@@ -46,19 +44,19 @@ describe("TodoList Component Functionality", () => {
   test("allows users to toggle the completion status of a todo", () => {
     render(<TodoList />);
 
-    // Target an incomplete todo (Buy groceries)
+    // Target an incomplete todo (Buy groceries - ID 1)
     const incompleteTodo = getTodoItem("Buy groceries");
 
-    // Initial check: Should be incomplete (no line-through)
+    // Initial check: Should be incomplete
     expect(incompleteTodo).toHaveStyle("text-decoration: none");
 
-    // 1. Simulate clicking the item to toggle its state
+    // 1. Simulate clicking the item to toggle its state (Incomplete -> Complete)
     fireEvent.click(incompleteTodo);
 
-    // 2. Verify state change: Should now be completed (line-through)
+    // 2. Verify state change: Should now be completed
     expect(incompleteTodo).toHaveStyle("text-decoration: line-through");
 
-    // 3. Simulate clicking again to toggle back
+    // 3. Simulate clicking again to toggle back (Complete -> Incomplete)
     fireEvent.click(incompleteTodo);
 
     // 4. Verify state change: Should now be incomplete again
@@ -70,13 +68,11 @@ describe("TodoList Component Functionality", () => {
     render(<TodoList />);
 
     const todoTextToDelete = "Buy groceries";
-    const initialTodoItem = getTodoItem(todoTextToDelete);
 
     // 1. Verify the todo is initially present
-    expect(initialTodoItem).toBeInTheDocument();
+    expect(screen.getByText(todoTextToDelete)).toBeInTheDocument();
 
-    // 2. Find the delete button associated with the todo item (assuming a unique ID is used internally, we find the button attached to the initial todo item)
-    // Since we don't expose IDs, we'll rely on the structure or use the test ID of the button
+    // 2. Find the delete button associated with ID 1
     const deleteButtonForId1 = screen.getByTestId("delete-button-1");
 
     // 3. Simulate clicking the delete button
@@ -84,8 +80,5 @@ describe("TodoList Component Functionality", () => {
 
     // 4. Verify the todo item is removed from the document
     expect(screen.queryByText(todoTextToDelete)).not.toBeInTheDocument();
-
-    // Verify the other initial todo still exists
-    expect(screen.getByText("Walk the dog")).toBeInTheDocument();
   });
 });

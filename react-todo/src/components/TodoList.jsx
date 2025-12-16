@@ -9,6 +9,7 @@ const initialTodos = [
 
 const TodoList = () => {
   const [todos, setTodos] = useState(initialTodos);
+  // Ensure nextId is tracked for new todos
   const [nextId, setNextId] = useState(3);
 
   // Method 1: Add Todo
@@ -18,14 +19,14 @@ const TodoList = () => {
       text,
       completed: false,
     };
-    setTodos([...todos, newTodo]);
-    setNextId(nextId + 1);
+    setTodos((prevTodos) => [...prevTodos, newTodo]);
+    setNextId((prevId) => prevId + 1);
   };
 
-  // Method 2: Toggle Todo
+  // Method 2: Toggle Todo (by clicking the <li>)
   const handleToggleTodo = (id) => {
-    setTodos(
-      todos.map((todo) =>
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
       )
     );
@@ -33,7 +34,7 @@ const TodoList = () => {
 
   // Method 3: Delete Todo
   const handleDeleteTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   };
 
   return (
@@ -46,8 +47,10 @@ const TodoList = () => {
         {todos.map((todo) => (
           <li
             key={todo.id}
+            // Add required click handler for toggle
             onClick={() => handleToggleTodo(todo.id)}
             style={{
+              // Add required style for visual toggle check
               textDecoration: todo.completed ? "line-through" : "none",
               cursor: "pointer",
               marginBottom: "5px",
@@ -57,7 +60,7 @@ const TodoList = () => {
             {todo.text}
             <button
               onClick={(e) => {
-                // Stop propagation to prevent toggleTodo from firing
+                // CRITICAL: Stop propagation to prevent handleToggleTodo from firing on button click
                 e.stopPropagation();
                 handleDeleteTodo(todo.id);
               }}
