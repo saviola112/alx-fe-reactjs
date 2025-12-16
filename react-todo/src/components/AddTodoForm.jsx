@@ -18,8 +18,8 @@ const AddTodoForm = ({ onAddTodo }) => {
         placeholder="Add new todo..."
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        // CRITICAL: Must have data-testid for easy selection in tests
         data-testid="todo-input"
+        name="todo-text-input"
       />
       <button type="submit" data-testid="add-button">
         Add
